@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 import pandas as pd
 
+
 app = Flask(__name__)
+app.config['TRUST_PROXY'] = True
+
 
 # Initialize your analyzer (consider loading your dataset here as well)
 # Define OccupationSkillAnalyzer class that will be used to analyze the dataset
@@ -76,6 +79,10 @@ class OccupationSkillAnalyzer:
 # Initialize the analyzer
 analyzer = OccupationSkillAnalyzer()
 
+@app.route('/')
+def home():
+    return 'Skills Database!'
+
 @app.route('/analyze', methods=['POST'])
 def analyze_occupation():
     data = request.json
@@ -88,4 +95,4 @@ def analyze_occupation():
     return jsonify({'skills': result.to_dict()}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True , host='0.0.0.0', port=8000)
